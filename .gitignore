@@ -1,8 +1,12 @@
-# Data files - DO NOT COMMIT
-data/
-*.csv
-*.xlsx
-*.json
+# Data files - teammate will download separately
+data/*.csv
+data/*.json
+data/*.xlsx
+data/*.txt
+# But allow data directory structure
+!data/
+!data/README.md
+!data/.gitkeep
 
 # Python
 __pycache__/
