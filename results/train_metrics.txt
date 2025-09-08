@@ -1,0 +1,9 @@
+alphas = [0.001,0.0001,0.5,0.55 ,0.01, 0.1, 1.0, 10.0]
+
+Model 1;Lasso Regression
+
+Best alpha from CV: 0.1
+Test Metrics:
+Mean Squared Error (MSE): 8.04
+Root Mean Squared Error (RMSE): 2.84
+R-squared (R²) Score: 0.91
