@@ -1,5 +1,5 @@
-from models.regression_model1 import LassoRegression
-import pamdas as pd
+import pandas as pd
+import numpy as np
 #since the dataset has missing values use extended imputation for data preprocessing
 def imputation(df):
     # Create a copy 
@@ -52,35 +52,24 @@ def imputation(df):
             'tracking_column': tracking_col_name
         }
 
-        #Copy
-        df_copy= df_imputed.copy()
 
         # One-hot encode categorical columns (Country, Status) , when working without them rsme was >4 but <5
-        df_encoded = pd.get_dummies(df_copy, columns=['Country', 'Status'], drop_first=True)#.astype(int)
+    df_encoded = pd.get_dummies(df_imputed, columns=['Country', 'Status'], drop_first=True)#.astype(int)
 
 
     return df_encoded, imputation_summary
-df_encoded, imputation_summary = imputation(df) # type: ignore
 
-df_encoded.shape
-df_encoded.head()
+#Load and prerocess data
+def load_prerocess_data(data_path):
+    df = pd.read_csv(data_path)
+    df_encoded, summary = imputation(df)
 
-from sklearn.preprocessing import StandardScaler
-import numpy as np
-import pandas as pd
+    # Strip column names (in case of trailing spaces in CSV)
+    df_encoded.columns = df_encoded.columns.str.strip()
 
-# Separate target
-y = df_encoded['Life expectancy'].astype(float).values
+    target='Life expectancy'
+    y=df[target]
+    X=df.drop(target, axis =1)
 
-# Drop object columns and target
-X = df_encoded.drop(columns=['Life expectancy']).astype(float).values
-
-# Scale features
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
-
-# --- Fit Lasso ---
-lasso = LassoRegression(alpha=0.001, learning_rate=0.001, max_iter=1000)  # also lowered LR
-lasso.fit(X_scaled, y)
-
-#print(lasso.get_params())
+    return X, y, summary    
+    
